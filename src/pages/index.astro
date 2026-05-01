@@ -14,22 +14,22 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
 
 <BaseLayout title="首页 | 技术博客">
   <!-- Hero Section -->
-  <section class="py-20 px-4">
+  <section class="py-12 md:py-20 px-4">
     <div class="max-w-4xl mx-auto text-center">
-      <div class="mb-8">
-        <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-4xl font-bold">
+      <div class="mb-6 md:mb-8">
+        <div class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold">
           博主
         </div>
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">欢迎来到我的技术博客</h1>
-      <p class="text-xl text-gray-600 dark:text-gray-400 mb-8">
+      <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">欢迎来到我的技术博客</h1>
+      <p class="text-base md:text-xl text-gray-600 dark:text-gray-400 mb-6 md:mb-8 px-4">
         一名热爱技术的前端开发者，专注分享学习心得与项目经验
       </p>
-      <div class="flex justify-center gap-4">
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+      <div class="flex justify-center gap-3 md:gap-4 flex-wrap">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-5 py-2 md:px-6 md:py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-sm md:text-base">
           GitHub
         </a>
-        <a href="/blog" class="px-6 py-2 border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
+        <a href="/blog" class="px-5 py-2 md:px-6 md:py-2 border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors text-sm md:text-base">
           阅读博客
         </a>
       </div>
@@ -37,29 +37,29 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
   </section>
 
   <!-- Featured Posts -->
-  <section class="py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
+  <section class="py-10 md:py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold mb-8 text-center">精选文章</h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-center">精选文章</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {(featuredPosts.length > 0 ? featuredPosts : posts.slice(0, 3)).map((post) => (
           <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-            <div class="h-40 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30"></div>
-            <div class="p-6">
-              <div class="flex items-center gap-2 mb-3">
+            <div class="h-32 md:h-40 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30"></div>
+            <div class="p-4 md:p-6">
+              <div class="flex flex-wrap items-center gap-2 mb-2 md:mb-3">
                 <span class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded">{post.data.category}</span>
                 <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
               </div>
-              <h3 class="text-lg font-semibold mb-2 hover:text-primary-600 transition-colors">
+              <h3 class="text-base md:text-lg font-semibold mb-2 hover:text-primary-600 transition-colors line-clamp-2">
                 <a href={`/blog/${post.slug}`}>{post.data.title}</a>
               </h3>
-              <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">
+              <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 hidden sm:block">
                 {post.data.description}
               </p>
             </div>
           </article>
         ))}
       </div>
-      <div class="text-center mt-8">
+      <div class="text-center mt-6 md:mt-8">
         <a href="/blog" class="text-primary-600 hover:text-primary-700 font-medium">
           查看更多 →
         </a>
@@ -68,22 +68,22 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
   </section>
 
   <!-- Recent Posts -->
-  <section class="py-16 px-4">
+  <section class="py-10 md:py-16 px-4">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold mb-8 text-center">最新文章</h2>
-      <div class="space-y-4 max-w-3xl mx-auto">
+      <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-center">最新文章</h2>
+      <div class="space-y-3 md:space-y-4 max-w-3xl mx-auto">
         {recentPosts.map((post) => (
-          <article class="flex gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow">
-            <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg flex-shrink-0 hidden sm:block"></div>
+          <article class="flex gap-3 md:gap-4 p-3 md:p-4 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg flex-shrink-0 hidden sm:block"></div>
             <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">{post.data.category}</span>
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xs px-2 py-0.5 md:py-1 bg-gray-100 dark:bg-gray-700 rounded">{post.data.category}</span>
                 <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
               </div>
-              <h3 class="font-semibold truncate hover:text-primary-600 transition-colors">
+              <h3 class="text-sm md:text-base font-semibold truncate hover:text-primary-600 transition-colors">
                 <a href={`/blog/${post.slug}`}>{post.data.title}</a>
               </h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+              <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1 hidden sm:block">
                 {post.data.description}
               </p>
             </div>
@@ -95,28 +95,28 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
 
   <!-- Projects -->
   {featuredProjects.length > 0 && (
-    <section class="py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
+    <section class="py-10 md:py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold mb-8 text-center">项目展示</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-center">项目展示</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {featuredProjects.map((project) => (
             <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-              <div class="h-36 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30"></div>
-              <div class="p-6">
-                <h3 class="text-lg font-semibold mb-2">{project.data.title}</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              <div class="h-28 md:h-36 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30"></div>
+              <div class="p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-semibold mb-2">{project.data.title}</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 md:mb-4 line-clamp-2">
                   {project.data.description}
                 </p>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
                   {project.data.techs.slice(0, 3).map((tech) => (
-                    <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">{tech}</span>
+                    <span class="text-xs px-2 py-0.5 md:py-1 bg-gray-100 dark:bg-gray-700 rounded">{tech}</span>
                   ))}
                 </div>
               </div>
             </article>
           ))}
         </div>
-        <div class="text-center mt-8">
+        <div class="text-center mt-6 md:mt-8">
           <a href="/projects" class="text-primary-600 hover:text-primary-700 font-medium">
             查看全部项目 →
           </a>
