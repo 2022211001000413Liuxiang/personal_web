@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Giscus from '../../components/Giscus.astro';
 
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post, index) => ({
@@ -24,7 +26,7 @@ const { Content, headings } = await post.render();
     <!-- Header -->
     <header class="mb-12 text-center">
       <div class="flex items-center justify-center gap-4 mb-4">
-        <a href={`/blog/category/${post.data.category}`} class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full hover:bg-primary-200 transition-colors">
+        <a href={`${base}/blog/category/${post.data.category}`} class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full hover:bg-primary-200 transition-colors">
           {post.data.category}
         </a>
         <span class="text-sm text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
@@ -32,7 +34,7 @@ const { Content, headings } = await post.render();
       <h1 class="text-3xl md:text-4xl font-bold mb-6">{post.data.title}</h1>
       <div class="flex justify-center gap-2 flex-wrap">
         {post.data.tags.map((tag) => (
-          <a href={`/blog/tag/${tag}`} class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
+          <a href={`${base}/blog/tag/${tag}`} class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
             {tag}
           </a>
         ))}
@@ -73,12 +75,12 @@ const { Content, headings } = await post.render();
     <!-- Navigation -->
     <nav class="flex justify-between mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
       {prev ? (
-        <a href={`/blog/${prev.slug}`} class="text-primary-600 hover:text-primary-700">
+        <a href={`${base}/blog/${prev.slug}`} class="text-primary-600 hover:text-primary-700">
           ← {prev.data.title}
         </a>
       ) : <span></span>}
       {next ? (
-        <a href={`/blog/${next.slug}`} class="text-primary-600 hover:text-primary-700">
+        <a href={`${base}/blog/${next.slug}`} class="text-primary-600 hover:text-primary-700">
           {next.data.title} →
         </a>
       ) : <span></span>}

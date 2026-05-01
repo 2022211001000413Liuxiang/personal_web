@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
+const base = import.meta.env.BASE_URL;
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -31,13 +32,13 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
           <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">分类</h3>
           <ul class="space-y-1">
             <li>
-              <a href="/blog" class="block w-full text-left px-3 py-2 rounded-lg text-sm bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300">
+              <a href={`${base}/blog`} class="block w-full text-left px-3 py-2 rounded-lg text-sm bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300">
                 全部
               </a>
             </li>
             {categories.map((cat) => (
               <li>
-                <a href={`/blog/category/${cat}`} class="block w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                <a href={`${base}/blog/category/${cat}`} class="block w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                   {cat}
                 </a>
               </li>
@@ -50,7 +51,7 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
           <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">标签</h3>
           <div class="flex flex-wrap gap-2">
             {allTags.map((tag) => (
-              <a href={`/blog/tag/${tag}`} class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-sm rounded-full hover:bg-primary-100 hover:text-primary-700 dark:hover:bg-primary-900/50 dark:hover:text-primary-300 transition-colors">
+              <a href={`${base}/blog/tag/${tag}`} class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-sm rounded-full hover:bg-primary-100 hover:text-primary-700 dark:hover:bg-primary-900/50 dark:hover:text-primary-300 transition-colors">
                 {tag}
               </a>
             ))}
@@ -66,20 +67,20 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
               <div class="w-full sm:w-32 h-32 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 rounded-lg flex-shrink-0 hidden sm:block"></div>
               <div class="flex-1 min-w-0">
                 <div class="flex flex-wrap items-center gap-2 mb-2">
-                  <a href={`/blog/category/${post.data.category}`} class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded hover:bg-primary-200 transition-colors">
+                  <a href={`${base}/blog/category/${post.data.category}`} class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded hover:bg-primary-200 transition-colors">
                     {post.data.category}
                   </a>
                   <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
                 </div>
                 <h2 class="text-lg md:text-xl font-semibold mb-2 hover:text-primary-600 transition-colors line-clamp-2">
-                  <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                  <a href={`${base}/blog/${post.slug}`}>{post.data.title}</a>
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2 hidden sm:block">
                   {post.data.description}
                 </p>
                 <div class="flex flex-wrap gap-1.5 md:gap-2">
                   {post.data.tags.map((tag) => (
-                    <a href={`/blog/tag/${tag}`} class="text-xs px-2 py-0.5 md:py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
+                    <a href={`${base}/blog/tag/${tag}`} class="text-xs px-2 py-0.5 md:py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
                       {tag}
                     </a>
                   ))}

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const base = import.meta.env.BASE_URL;
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -29,7 +30,7 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
         <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-5 py-2 md:px-6 md:py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-sm md:text-base">
           GitHub
         </a>
-        <a href="/blog" class="px-5 py-2 md:px-6 md:py-2 border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors text-sm md:text-base">
+        <a href={`${base}/blog`} class="px-5 py-2 md:px-6 md:py-2 border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors text-sm md:text-base">
           阅读博客
         </a>
       </div>
@@ -50,7 +51,7 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
                 <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
               </div>
               <h3 class="text-base md:text-lg font-semibold mb-2 hover:text-primary-600 transition-colors line-clamp-2">
-                <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                <a href={`${base}/blog/${post.slug}`}>{post.data.title}</a>
               </h3>
               <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 hidden sm:block">
                 {post.data.description}
@@ -60,7 +61,7 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
         ))}
       </div>
       <div class="text-center mt-6 md:mt-8">
-        <a href="/blog" class="text-primary-600 hover:text-primary-700 font-medium">
+        <a href={`${base}/blog`} class="text-primary-600 hover:text-primary-700 font-medium">
           查看更多 →
         </a>
       </div>
@@ -81,7 +82,7 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
                 <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
               </div>
               <h3 class="text-sm md:text-base font-semibold truncate hover:text-primary-600 transition-colors">
-                <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                <a href={`${base}/blog/${post.slug}`}>{post.data.title}</a>
               </h3>
               <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1 hidden sm:block">
                 {post.data.description}
@@ -117,7 +118,7 @@ const featuredProjects = allProjects.filter((p) => p.data.featured).slice(0, 3);
           ))}
         </div>
         <div class="text-center mt-6 md:mt-8">
-          <a href="/projects" class="text-primary-600 hover:text-primary-700 font-medium">
+          <a href={`${base}/projects`} class="text-primary-600 hover:text-primary-700 font-medium">
             查看全部项目 →
           </a>
         </div>
