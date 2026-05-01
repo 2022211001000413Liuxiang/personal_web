@@ -1,16 +1,12 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const categories = ['全部', '前端', '后端', 'DevOps', '生活'];
-const tags = ['React', 'TypeScript', 'Node.js', 'Docker', '性能优化'];
-const posts = [
-  { slug: 'react-hooks-deep-dive', title: 'React Hooks 深入理解与实践', excerpt: '深入解析 React Hooks 的工作原理，包括 useState、useEffect、useRef 等常用 Hooks 的使用场景和注意事项。', date: '2026-04-15', category: '前端', tags: ['React', 'TypeScript'], readingTime: '8分钟' },
-  { slug: 'typescript-advanced-types', title: 'TypeScript 类型体操入门指南', excerpt: '学习如何在 TypeScript 中使用高级类型、条件类型和映射类型进行类型编程。', date: '2026-04-12', category: '前端', tags: ['TypeScript'], readingTime: '10分钟' },
-  { slug: 'nodejs-api-design', title: 'Node.js RESTful API 设计最佳实践', excerpt: '探讨如何设计清晰的 RESTful API，包括路由规划、错误处理、权限验证等方面。', date: '2026-04-08', category: '后端', tags: ['Node.js'], readingTime: '12分钟' },
-  { slug: 'docker-getting-started', title: 'Docker 从入门到实践', excerpt: '详细介绍 Docker 的核心概念、常用命令以及如何编写 Dockerfile 和 docker-compose.yml。', date: '2026-04-05', category: 'DevOps', tags: ['Docker'], readingTime: '15分钟' },
-  { slug: 'frontend-performance', title: '前端性能优化完全指南', excerpt: '从加载性能、渲染性能、交互性能三个维度全面提升网页性能的方法与实践。', date: '2026-04-01', category: '前端', tags: ['React', '性能优化'], readingTime: '20分钟' },
-  { slug: 'css-grid-layout', title: 'CSS Grid 布局完全掌握', excerpt: '深入学习 CSS Grid 布局的核心概念和实际应用场景，让你轻松应对各种页面布局需求。', date: '2026-03-28', category: '前端', tags: ['CSS'], readingTime: '10分钟' },
-];
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = [...new Set(posts.map((post) => post.data.category))];
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
 ---
 
 <BaseLayout title="博客 | 技术博客" description="浏览所有技术文章">
@@ -24,18 +20,16 @@ const posts = [
         <div class="mb-8">
           <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">分类</h3>
           <ul class="space-y-2">
+            <li>
+              <a href="/blog" class="block w-full text-left px-3 py-2 rounded-lg text-sm bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300">
+                全部
+              </a>
+            </li>
             {categories.map((cat) => (
               <li>
-                <button
-                  class:list={[
-                    'w-full text-left px-3 py-2 rounded-lg text-sm transition-colors',
-                    cat === '全部'
-                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-800',
-                  ]}
-                >
+                <a href={`/blog/category/${cat}`} class="block w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                   {cat}
-                </button>
+                </a>
               </li>
             ))}
           </ul>
@@ -45,10 +39,10 @@ const posts = [
         <div>
           <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">标签</h3>
           <div class="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-sm rounded-full cursor-pointer hover:bg-primary-100 hover:text-primary-700 dark:hover:bg-primary-900/50 dark:hover:text-primary-300 transition-colors">
+            {allTags.map((tag) => (
+              <a href={`/blog/tag/${tag}`} class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-sm rounded-full hover:bg-primary-100 hover:text-primary-700 dark:hover:bg-primary-900/50 dark:hover:text-primary-300 transition-colors">
                 {tag}
-              </span>
+              </a>
             ))}
           </div>
         </div>
@@ -62,19 +56,20 @@ const posts = [
               <div class="w-32 h-32 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 rounded-lg flex-shrink-0 hidden sm:block"></div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-3 mb-2">
-                  <span class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded">{post.category}</span>
-                  <span class="text-xs text-gray-500">{post.date}</span>
-                  <span class="text-xs text-gray-500">· {post.readingTime}</span>
+                  <span class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded">{post.data.category}</span>
+                  <span class="text-xs text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
                 </div>
                 <h2 class="text-xl font-semibold mb-2 hover:text-primary-600 transition-colors">
-                  <a href={`/blog/${post.slug}`}>{post.title}</a>
+                  <a href={`/blog/${post.slug}`}>{post.data.title}</a>
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                  {post.excerpt}
+                  {post.data.description}
                 </p>
                 <div class="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">{tag}</span>
+                  {post.data.tags.map((tag) => (
+                    <a href={`/blog/tag/${tag}`} class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
+                      {tag}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -82,20 +77,11 @@ const posts = [
           ))}
         </div>
 
-        <!-- Pagination -->
-        <div class="flex justify-center mt-8">
-          <nav class="flex gap-2">
-            <button class="px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50" disabled>
-              上一页
-            </button>
-            <button class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm">1</button>
-            <button class="px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">2</button>
-            <button class="px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">3</button>
-            <button class="px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              下一页
-            </button>
-          </nav>
-        </div>
+        {posts.length === 0 && (
+          <div class="text-center py-12 text-gray-500">
+            <p>暂无文章</p>
+          </div>
+        )}
       </main>
     </div>
   </div>
