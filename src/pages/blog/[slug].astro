@@ -1,94 +1,43 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const post = {
-  title: 'React Hooks 深入理解与实践',
-  date: '2026-04-15',
-  category: '前端',
-  tags: ['React', 'TypeScript'],
-  readingTime: '8分钟',
-  toc: [
-    { id: '1', text: '什么是 Hooks', level: 2 },
-    { id: '2', text: 'useState 的使用', level: 2 },
-    { id: '3', text: 'useEffect 的细节', level: 2 },
-    { id: '4', text: '自定义 Hooks', level: 2 },
-  ],
-};
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
 ---
 
-<BaseLayout title={`${post.title} | 技术博客`}>
+<BaseLayout title={`${post.data.title} | 技术博客`}>
   <article class="max-w-4xl mx-auto px-4 py-12">
     <!-- Header -->
     <header class="mb-12 text-center">
       <div class="flex items-center justify-center gap-4 mb-4">
-        <span class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full">{post.category}</span>
-        <span class="text-sm text-gray-500">{post.date}</span>
-        <span class="text-sm text-gray-500">· {post.readingTime}</span>
+        <span class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full">{post.data.category}</span>
+        <span class="text-sm text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
       </div>
-      <h1 class="text-3xl md:text-4xl font-bold mb-6">{post.title}</h1>
+      <h1 class="text-3xl md:text-4xl font-bold mb-6">{post.data.title}</h1>
       <div class="flex justify-center gap-2">
-        {post.tags.map((tag) => (
+        {post.data.tags.map((tag) => (
           <span class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full">{tag}</span>
         ))}
       </div>
     </header>
 
-    <div class="flex gap-12">
-      <!-- TOC -->
-      <aside class="hidden lg:block w-48 flex-shrink-0">
-        <div class="sticky top-24">
-          <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">目录</h3>
-          <nav class="space-y-2">
-            {post.toc.map((item) => (
-              <a
-                href={`#${item.id}`}
-                class:list={[
-                  'block text-sm hover:text-primary-600 transition-colors',
-                  item.level === 2 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400 pl-3',
-                ]}
-              >
-                {item.text}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </aside>
-
-      <!-- Content -->
-      <div class="flex-1 min-w-0 prose dark:prose-invert max-w-none">
-        <h2 id="1">什么是 Hooks</h2>
-        <p>React Hooks 是 React 16.8 引入的新特性，它让我们可以在函数组件中使用 state 和其他 React 特性。在 Hooks 之前，我们只能通过类组件来使用这些功能。</p>
-
-        <h2 id="2">useState 的使用</h2>
-        <p><code>useState</code> 是最基本的 Hook，它让我们在函数组件中添加 state。</p>
-        <pre><code class="language-jsx">const [count, setCount] = useState(0);</code></pre>
-        <p>useState 接受一个初始值，返回一个数组，包含当前状态和一个更新状态的函数。</p>
-
-        <h2 id="3">useEffect 的细节</h2>
-        <p><code>useEffect</code> 用于处理副作用，比如数据获取、订阅、手动 DOM 操作等。</p>
-        <pre><code class="language-jsx">useEffect(() => {
-  // 副作用逻辑
-  return () => {
-    // 清理逻辑
-  };
-}, [dependencies]);</code></pre>
-
-        <h2 id="4">自定义 Hooks</h2>
-        <p>自定义 Hook 是一个以 <code>use</code> 开头的函数，其内部可以调用其他 Hook。通过自定义 Hook，我们可以复用有状态逻辑。</p>
-
-        <blockquote>
-          <p>Hooks 让我们能够更简洁地编写 React 组件，同时保持逻辑的可复用性。</p>
-        </blockquote>
-      </div>
+    <!-- Content -->
+    <div class="prose dark:prose-invert max-w-none">
+      <slot />
     </div>
 
     <!-- Navigation -->
     <nav class="flex justify-between mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <a href="#" class="text-primary-600 hover:text-primary-700">
-        ← 上一篇：TypeScript 类型体操入门指南
-      </a>
-      <a href="#" class="text-primary-600 hover:text-primary-700">
-        下一篇：Node.js RESTful API 设计最佳实践 →
+      <a href="/blog" class="text-primary-600 hover:text-primary-700">
+        ← 返回文章列表
       </a>
     </nav>
 

@@ -1,101 +1,48 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const project = {
-  title: '个人技术博客',
-  description: '基于 Astro + Tailwind CSS 构建的静态博客网站，支持 Markdown 写作和暗黑模式。',
-  techs: ['Astro', 'Tailwind CSS', 'TypeScript'],
-  github: 'https://github.com',
-  demo: 'https://example.com',
-  date: '2026-03-01',
-  role: '独立开发',
-  features: [
-    '基于 Markdown/MDX 的内容创作',
-    '响应式设计，支持移动端',
-    '暗黑模式自动切换',
-    'SEO 友好设计',
-    'Giscus 评论系统集成',
-  ],
-  challenges: [
-    '首次使用 Astro 框架，需要适应新的开发模式',
-    '实现暗黑模式与系统偏好的同步',
-    '优化首屏加载性能',
-  ],
-};
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
 ---
 
-<BaseLayout title={`${project.title} | 项目展示`}>
+<BaseLayout title={`${project.data.title} | 项目展示`}>
   <article class="max-w-4xl mx-auto px-4 py-12">
     <!-- Header -->
     <header class="mb-12">
       <div class="h-64 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30 rounded-2xl mb-8"></div>
-      <h1 class="text-3xl md:text-4xl font-bold mb-4">{project.title}</h1>
-      <p class="text-xl text-gray-600 dark:text-gray-400">{project.description}</p>
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">{project.data.title}</h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400">{project.data.description}</p>
       <div class="flex flex-wrap gap-4 mt-6">
-        <a href={project.github} target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-gray-900 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors flex items-center gap-2">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          查看源码
-        </a>
-        {project.demo && (
-          <a href={project.demo} target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-            </svg>
+        {project.data.github && (
+          <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-gray-900 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors">
+            查看源码
+          </a>
+        )}
+        {project.data.demo && (
+          <a href={project.data.demo} target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
             在线演示
           </a>
         )}
       </div>
     </header>
 
-    <!-- Meta -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-      <div>
-        <span class="text-xs text-gray-500 block mb-1">创建时间</span>
-        <span class="text-sm font-medium">{project.date}</span>
-      </div>
-      <div>
-        <span class="text-xs text-gray-500 block mb-1">技术栈</span>
-        <div class="flex flex-wrap gap-1">
-          {project.techs.map((tech) => (
-            <span class="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">{tech}</span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <span class="text-xs text-gray-500 block mb-1">项目角色</span>
-        <span class="text-sm font-medium">{project.role}</span>
-      </div>
-      <div>
-        <span class="text-xs text-gray-500 block mb-1">开源协议</span>
-        <span class="text-sm font-medium">MIT</span>
-      </div>
-    </div>
-
     <!-- Content -->
     <div class="prose dark:prose-invert max-w-none">
-      <h2>项目背景</h2>
-      <p>在日常学习与开发过程中，我积累了很多技术笔记和项目经验。为了更好地管理这些内容并分享给社区，我决定开发一个个人技术博客网站。</p>
-
-      <h2>主要功能</h2>
-      <ul>
-        {project.features.map((f) => <li>{f}</li>)}
-      </ul>
-
-      <h2>技术难点与解决方案</h2>
-      <ul>
-        {project.challenges.map((c) => <li>{c}</li>)}
-      </ul>
+      <slot />
     </div>
 
     <!-- Back Link -->
     <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
       <a href="/projects" class="text-primary-600 hover:text-primary-700 flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        返回项目列表
+        ← 返回项目列表
       </a>
     </div>
   </article>
