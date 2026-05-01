@@ -1,16 +1,22 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Giscus from '../../components/Giscus.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
+  return posts.map((post, index) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: {
+      post,
+      prev: posts[index + 1] || null,
+      next: posts[index - 1] || null,
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await post.render();
 ---
 
 <BaseLayout title={`${post.data.title} | 技术博客`}>
@@ -18,35 +24,70 @@ const { post } = Astro.props;
     <!-- Header -->
     <header class="mb-12 text-center">
       <div class="flex items-center justify-center gap-4 mb-4">
-        <span class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full">{post.data.category}</span>
+        <a href={`/blog/category/${post.data.category}`} class="text-sm px-3 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded-full hover:bg-primary-200 transition-colors">
+          {post.data.category}
+        </a>
         <span class="text-sm text-gray-500">{post.data.date.toISOString().split('T')[0]}</span>
       </div>
       <h1 class="text-3xl md:text-4xl font-bold mb-6">{post.data.title}</h1>
-      <div class="flex justify-center gap-2">
+      <div class="flex justify-center gap-2 flex-wrap">
         {post.data.tags.map((tag) => (
-          <span class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full">{tag}</span>
+          <a href={`/blog/tag/${tag}`} class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors">
+            {tag}
+          </a>
         ))}
       </div>
     </header>
 
-    <!-- Content -->
-    <div class="prose dark:prose-invert max-w-none">
-      <slot />
+    <div class="flex gap-12">
+      <!-- TOC -->
+      {headings.length > 0 && (
+        <aside class="hidden lg:block w-48 flex-shrink-0">
+          <div class="sticky top-24">
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">目录</h3>
+            <nav class="space-y-2">
+              {headings.filter(h => h.depth <= 3).map((heading) => (
+                <a
+                  href={`#${heading.slug}`}
+                  class:list={[
+                    'block text-sm hover:text-primary-600 transition-colors',
+                    heading.depth === 2 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400 pl-3',
+                  ]}
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </aside>
+      )}
+
+      <!-- Content -->
+      <div class="flex-1 min-w-0">
+        <div class="prose dark:prose-invert max-w-none">
+          <Content />
+        </div>
+      </div>
     </div>
 
     <!-- Navigation -->
     <nav class="flex justify-between mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <a href="/blog" class="text-primary-600 hover:text-primary-700">
-        ← 返回文章列表
-      </a>
+      {prev ? (
+        <a href={`/blog/${prev.slug}`} class="text-primary-600 hover:text-primary-700">
+          ← {prev.data.title}
+        </a>
+      ) : <span></span>}
+      {next ? (
+        <a href={`/blog/${next.slug}`} class="text-primary-600 hover:text-primary-700">
+          {next.data.title} →
+        </a>
+      ) : <span></span>}
     </nav>
 
-    <!-- Comments Placeholder -->
+    <!-- Comments -->
     <section class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
       <h3 class="text-lg font-semibold mb-4">评论</h3>
-      <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg text-center text-gray-500">
-        <p>评论功能开发中...</p>
-      </div>
+      <Giscus />
     </section>
   </article>
 </BaseLayout>

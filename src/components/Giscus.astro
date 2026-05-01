@@ -1,0 +1,44 @@
+---
+---
+
+<div class="giscus" id="comments"></div>
+
+<script is:inline>
+  const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
+  const script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', '你的用户名/你的仓库名');
+  script.setAttribute('data-repo-id', '你的-repo-id');
+  script.setAttribute('data-category', 'Announcements');
+  script.setAttribute('data-category-id', '你的-category-id');
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'top');
+  script.setAttribute('data-theme', theme);
+  script.setAttribute('data-lang', 'zh-CN');
+  script.setAttribute('data-loading', 'lazy');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+
+  document.getElementById('comments')?.appendChild(script);
+
+  // 监听主题变化
+  const observer = new MutationObserver(() => {
+    const newTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const iframe = document.querySelector('.giscus-frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: newTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+</script>
