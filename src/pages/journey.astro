@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const timeline = [
+  { date: '2024-01', title: '开始学习前端开发', description: '从 HTML、CSS、JavaScript 基础开始，正式踏入前端开发领域。' },
+  { date: '2024-06', title: '完成第一个完整项目', description: '使用 React + Node.js 完成了一个任务管理应用，积累了全栈开发经验。' },
+  { date: '2024-09', title: '学习 TypeScript', description: '系统学习了 TypeScript，并在项目中实践类型安全的开发方式。' },
+  { date: '2025-01', title: '深入 React 生态系统', description: '学习 Redux、React Router 等库，掌握了大型前端应用的架构设计。' },
+  { date: '2025-06', title: '开始学习后端开发', description: '学习 Node.js、Express 和数据库，为成为全栈开发者做准备。' },
+  { date: '2025-12', title: '搭建个人技术博客', description: '使用 Astro 框架搭建了这个技术博客系统，用于知识沉淀和分享。' },
+  { date: '2026-03', title: '学习 DevOps 基础', description: '学习 Docker、CI/CD 和云服务部署，掌握了完整的项目交付流程。' },
+];
+
+const skills = {
+  frontend: [
+    { name: 'HTML/CSS', level: 90 },
+    { name: 'JavaScript', level: 85 },
+    { name: 'TypeScript', level: 80 },
+    { name: 'React', level: 85 },
+    { name: 'Vue.js', level: 70 },
+    { name: 'Tailwind CSS', level: 85 },
+  ],
+  backend: [
+    { name: 'Node.js', level: 75 },
+    { name: 'Express', level: 70 },
+    { name: 'Python', level: 60 },
+    { name: 'RESTful API', level: 80 },
+  ],
+  devops: [
+    { name: 'Git', level: 85 },
+    { name: 'Docker', level: 65 },
+    { name: 'Linux', level: 70 },
+    { name: 'CI/CD', level: 60 },
+  ],
+  database: [
+    { name: 'MySQL', level: 70 },
+    { name: 'MongoDB', level: 65 },
+    { name: 'Redis', level: 50 },
+  ],
+};
+---
+
+<BaseLayout title="成长路径 | 技术博客">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-8 text-center">成长路径</h1>
+
+    <!-- Timeline -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-8 flex items-center gap-2">
+        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        学习时间轴
+      </h2>
+      <div class="relative">
+        <!-- Timeline Line -->
+        <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700 transform md:-translate-x-1/2"></div>
+
+        <!-- Timeline Items -->
+        <div class="space-y-8">
+          {timeline.map((item, index) => (
+            <div class:list={['relative flex items-start', index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse']}>
+              <!-- Dot -->
+              <div class="absolute left-4 md:left-1/2 w-4 h-4 bg-primary-600 rounded-full transform md:-translate-x-1/2 z-10"></div>
+
+              <!-- Content -->
+              <div class:list={['ml-10 md:ml-0 md:w-1/2', index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left']}>
+                <div class:list={[
+                  'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm',
+                  index % 2 === 0 ? 'md:text-right' : 'md:text-left'
+                ]}>
+                  <span class="text-xs text-primary-600 font-medium">{item.date}</span>
+                  <h3 class="text-lg font-semibold mt-1 mb-2">{item.title}</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Skill Matrix -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-8 flex items-center gap-2">
+        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        技能矩阵
+      </h2>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        {Object.entries(skills).map(([category, items]) => (
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 capitalize">
+              {category === 'frontend' && '前端开发'}
+              {category === 'backend' && '后端开发'}
+              {category === 'devops' && 'DevOps'}
+              {category === 'database' && '数据库'}
+            </h3>
+            <div class="space-y-4">
+              {items.map((skill) => (
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>{skill.name}</span>
+                    <span class="text-gray-500">{skill.level}%</span>
+                  </div>
+                  <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full transition-all duration-500"
+                      style={`width: ${skill.level}%`}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="首页 | 技术博客">
+  <!-- Hero Section -->
+  <section class="py-20 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="mb-8">
+        <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-4xl font-bold">
+          博主
+        </div>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">欢迎来到我的技术博客</h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 mb-8">
+        一名热爱技术的前端开发者，专注分享学习心得与项目经验
+      </p>
+      <div class="flex justify-center gap-4">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+          GitHub
+        </a>
+        <a href="/blog" class="px-6 py-2 border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
+          阅读博客
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts -->
+  <section class="py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-bold mb-8 text-center">精选文章</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            <div class="h-40 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30"></div>
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300 rounded">前端</span>
+                <span class="text-xs text-gray-500">2026-04-15</span>
+              </div>
+              <h3 class="text-lg font-semibold mb-2 hover:text-primary-600 transition-colors">
+                <a href="#">React Hooks 深入理解与实践</a>
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">
+                深入解析 React Hooks 的工作原理，包括 useState、useEffect、useRef 等常用 Hooks 的使用场景和注意事项。
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="text-center mt-8">
+        <a href="/blog" class="text-primary-600 hover:text-primary-700 font-medium">
+          查看更多 →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts -->
+  <section class="py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-bold mb-8 text-center">最新文章</h2>
+      <div class="space-y-4 max-w-3xl mx-auto">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <article class="flex gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow">
+            <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-lg flex-shrink-0"></div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">前端</span>
+                <span class="text-xs text-gray-500">2026-04-{20 - i}</span>
+              </div>
+              <h3 class="font-semibold truncate hover:text-primary-600 transition-colors">
+                <a href="#">TypeScript 类型体操入门指南</a>
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+                学习如何在 TypeScript 中使用高级类型和条件类型进行类型编程。
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="py-16 px-4 bg-gray-50 dark:bg-gray-800/50">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-bold mb-8 text-center">项目展示</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            <div class="h-36 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30"></div>
+            <div class="p-6">
+              <h3 class="text-lg font-semibold mb-2">个人博客系统</h3>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                基于 React + Node.js 的全栈博客项目，支持 Markdown 编辑和评论功能。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">React</span>
+                <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Node.js</span>
+                <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">MongoDB</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="text-center mt-8">
+        <a href="/projects" class="text-primary-600 hover:text-primary-700 font-medium">
+          查看全部项目 →
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
