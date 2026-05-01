@@ -6,9 +6,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  articleDate?: Date;
 }
 
-const { title, description = '一个技术人的个人博客' } = Astro.props;
+const { title, description = '一个技术人的个人博客', image, articleDate } = Astro.props;
+const siteUrl = 'https://2022211001000413liuxiang.github.io/personal_web';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
 ---
 
 <!doctype html>
@@ -16,9 +20,34 @@ const { title, description = '一个技术人的个人博客' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+
+    <!-- Primary Meta Tags -->
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={articleDate ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="技术博客" />
+    {image && <meta property="og:image" content={new URL(image, siteUrl)} />}
+    {articleDate && <meta property="article:published_time" content={articleDate.toISOString()} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={new URL(image, siteUrl)} />}
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" />
+
     <script is:inline>
       const theme = (() => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
