@@ -12,4 +12,11 @@ export default defineConfig({
     }),
   ],
   output: 'static',
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['/pagefind/pagefind.js'],
+      },
+    },
+  },
 });

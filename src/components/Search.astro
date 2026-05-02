@@ -1,0 +1,111 @@
+---
+---
+
+<button
+  id="search-btn"
+  class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+  aria-label="搜索"
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+</button>
+
+<!-- Search Modal -->
+<div id="search-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/50" id="search-overlay"></div>
+  <div class="relative max-w-2xl mx-auto mt-20 bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
+    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          class="flex-1 bg-transparent border-none outline-none text-lg"
+          placeholder="搜索文章..."
+          autocomplete="off"
+        />
+        <kbd class="hidden sm:inline-block px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded">ESC</kbd>
+      </div>
+    </div>
+    <div id="search-results" class="max-h-96 overflow-y-auto p-4">
+      <p class="text-gray-500 text-center py-8">输入关键词搜索文章...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let pagefind: any = null;
+  let isLoaded = false;
+
+  async function loadPagefind() {
+    if (isLoaded) return;
+    try {
+      // @ts-ignore
+      pagefind = await import('/pagefind/pagefind.js');
+      await pagefind.init();
+      isLoaded = true;
+    } catch (e) {
+      console.error('Search not available:', e);
+    }
+  }
+
+  const modal = document.getElementById('search-modal');
+  const searchBtn = document.getElementById('search-btn');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const resultsContainer = document.getElementById('search-results');
+  const overlay = document.getElementById('search-overlay');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    searchInput?.focus();
+    loadPagefind();
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+  }
+
+  searchBtn?.addEventListener('click', openModal);
+  overlay?.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      modal?.classList.contains('hidden') ? openModal() : closeModal();
+    }
+  });
+
+  let debounceTimer: number;
+  searchInput?.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(async () => {
+      const query = searchInput.value.trim();
+      if (!query || !pagefind) {
+        if (!query) {
+          resultsContainer!.innerHTML = '<p class="text-gray-500 text-center py-8">输入关键词搜索文章...</p>';
+        }
+        return;
+      }
+
+      const search = await pagefind.search(query);
+      const results = await Promise.all(search.results.slice(0, 8).map((r: any) => r.data()));
+
+      if (results.length === 0) {
+        resultsContainer!.innerHTML = '<p class="text-gray-500 text-center py-8">没有找到相关结果</p>';
+        return;
+      }
+
+      const base = import.meta.env.BASE_URL;
+      resultsContainer!.innerHTML = results.map((r: any) => `
+        <a href="${base}${r.url}" class="block p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <h3 class="font-semibold text-lg mb-1">${r.meta?.title || '无标题'}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">${r.excerpt || ''}</p>
+        </a>
+      `).join('');
+    }, 200);
+  });
+</script>
