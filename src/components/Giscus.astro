@@ -4,7 +4,7 @@
 <div class="giscus" id="comments"></div>
 
 <script is:inline>
-  const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  const giscusTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
@@ -17,7 +17,7 @@
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', theme);
+  script.setAttribute('data-theme', giscusTheme);
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
