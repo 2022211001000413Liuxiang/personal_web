@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="留言板 | 技术博客" description="欢迎在这里留言交流">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-bold mb-4">留言板</h1>
+      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        有什么想说的、想问的，或者只是想打个招呼，都可以在这里留言。
+      </p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 mb-8">
+      <Giscus />
+    </div>
+
+    <div class="text-center">
+      <a href={`${base}`} class="text-primary-600 hover:text-primary-700 flex items-center justify-center gap-2">
+        ← 返回首页
+      </a>
+    </div>
+  </div>
+</BaseLayout>
