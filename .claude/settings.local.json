@@ -11,7 +11,8 @@
       "Bash(git commit -m ' *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(curl -s http://localhost:4321/blog)"
+      "Bash(curl -s http://localhost:4321/blog)",
+      "Bash(curl -s http://localhost:4322/personal_web/pagefind/pagefind.js)"
     ]
   }
 }
